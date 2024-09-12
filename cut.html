@@ -36,8 +36,10 @@
         }
         #img-container {
             margin-top: 20px;
-            width: 400px;
-            height: 225px;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            aspect-ratio: 16/9;
             border: 2px dashed #ccc;
             display: flex;
             justify-content: center;
@@ -72,6 +74,10 @@
         }
         #canvas {
             margin-top: 30px;
+            width: 100%;
+            max-width: 980px;
+            height: auto;
+            aspect-ratio: 16/9;
             border: 2px solid #333;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -92,6 +98,20 @@
         h3 {
             margin-top: 20px;
             color: #333;
+        }
+
+        /* スマートフォン対応 */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 22px;
+            }
+            #cropBtn, #download_link {
+                width: 90%;
+            }
+            #canvas {
+                width: 100%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
@@ -142,7 +162,7 @@
 
                     // Cropperを初期化または再初期化
                     if (cropper) {
-                        cropper.destroy();  // すでに存在する場合は破棄する
+                        cropper.destroy();  // すでに存在する場合は破棲する
                     }
                     cropper = new Cropper(image, {
                         aspectRatio: null,  // アスペクト比の制限を解除
@@ -165,7 +185,7 @@
 
                 // Cropperを初期化する
                 if (cropper) {
-                    cropper.destroy();  // すでに存在する場合は破棄する
+                    cropper.destroy();  // すでに存在する場合は破棲する
                 }
                 cropper = new Cropper(image, {
                     aspectRatio: null,  // アスペクト比の制限を解除
