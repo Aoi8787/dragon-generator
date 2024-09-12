@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>好きな〇〇発表ドラゴンジェネレーター</title>
+    <link rel="stylesheet" href="css/doragonn.css">
+    <style>
+    body {
+        background-color: #e0e0e0; /* 背景色をグレーに変更 */
+        font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif;
+    }
+
+    /* タイトル部分のスタイル（吹き出しデザイン） */
+    h1 {
+        position: relative;
+        display: inline-block;
+        margin: 1.5em 15px 1.5em 0;
+        padding: 7px 10px;
+        min-width: 120px;
+        max-width: 100%;
+        color: #555;
+        font-size: 24px; /* タイトル用にフォントサイズを大きめに設定 */
+        background: #FFF;
+        border: solid 3px #555;
+        box-sizing: border-box;
+    }
+
+    h1:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -24px;
+        margin-top: -12px;
+        border: 12px solid transparent;
+        border-left: 12px solid #FFF;
+        z-index: 2;
+    }
+
+    h1:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -30px;
+        margin-top: -14px;
+        border: 14px solid transparent;
+        border-left: 14px solid #555;
+        z-index: 1;
+    }
+
+    .app {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .img-canvas {
+        border: 1px solid black;
+        margin-top: 20px;
+        position: relative;
+    }
+
+    .download-link {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .download-link:hover {
+        background-color: #45a049;
+    }
+
+    textarea {
+        width: 30%;
+        height: 60px;
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 16px;
+    }
+
+    button {
+        padding: 15px 30px;
+        font-size: 18px;
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #1976D2;
+    }
+
+    .drop-zone {
+        width: 300px;
+        height: 100px;
+        border: 2px dashed #ccc;
+        margin: 20px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+        font-size: 16px;
+    }
+
+    .drop-zone.hover {
+        background-color: #f0f0f0;
+    }
+    
+    /* 新しいテキストエリアスタイル */
+    .new-text-box {
+        padding: 0.5em 1em;
+        margin: 1em 0;
+        background: #e8e8e8; /* 背景色 */
+        border-left: solid 6px #ffcc00;
+        box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2); /* 影の強さを少し抑えました */
+    }
+
+    .new-text-box textarea {
+        width: 300px;
+        height: 50px;
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* ファイル入力のスタイル */
+    .file-input-wrapper {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 20px;
+    }
+
+    .file-input {
+        padding: 10px;
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+  
+    <div id="app" class="app">
+        <div class="h1-container">
+            <h1>好きな〇〇発表ドラゴンジェネレーター</h1>
+            <img src="images/好きな惣菜発表ドラゴン3.png" alt="ドラゴンの画像">
+        </div>
+
+        <div class="box22">
+          <textarea v-model="text1" placeholder="好きな分野を入力してください"></textarea>
+        </div>
+      
+        <div class="box22">
+          <textarea v-model="text2" placeholder="ドラゴンに発表させたいものを入力してください"></textarea>
+        </div>
+        
+        <!-- ドラッグアンドドロップ用の専用ゾーン -->
+        <div class="drop-zone" 
+             @dragover.prevent 
+             @dragenter="onDragEnter" 
+             @dragleave="onDragLeave" 
+             @drop.prevent="handleDrop">
+             ここにドラッグ＆ドロップでドラゴンの吹き出しに画像を入れることもできます
+        </div>
+
+        <!-- ファイル選択ボタンを追加 -->
+        <div class="file-input-wrapper">
+            <input type="file" @change="handleFileSelect" class="file-input">
+        </div>
+
+        <!-- 新しい入力フォームを追加 -->
+        <div class="new-text-box">
+          <textarea v-model="text3" placeholder="吹き出しに画像を入れる場合はその下に文字を入れることもできます"></textarea>
+        </div>
+
+        <!-- ボタンをテキストエリアの下に中央揃えで配置 -->
+        <button @click="drawCanvas">画像を生成</button>
+
+        <!-- Canvas表示 -->
+        <h3>あなただけの好きな〇〇発表ドラゴンを作ろう！</h3>
+        <canvas id="canvas" class="img-canvas" width="640" height="360"></canvas>
+
+        <!-- Canvasの内容を画像として表示 -->
+        <h3>右クリックか長押しで保存してください</h3>
+        <img :src="imageSrc" alt="Canvas Image Result" v-if="imageSrc">
+
+        <!-- ダウンロードリンク -->
+        <a :href="imageSrc" download="generated-image.jpg" class="download-link" v-if="imageSrc">画像をダウンロード</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          text1: '', // 上部テキスト入力
+          text2: '', // 吹き出し内のテキスト入力
+          text3: '', // 新しいテキストエリア入力
+          imageSrc: '',
+          templateImageSrc: 'images/好きな惣菜発表ドラゴン.png', // テンプレート画像
+          droppedImage: null, // ドロップされた画像
+          isHovering: false // ドラッグアンドドロップ時のhover状態
+        },
+        methods: {
+          onDragEnter() {
+            this.isHovering = true;
+          },
+          onDragLeave() {
+            this.isHovering = false;
+          },
+          handleDrop(event) {
+            this.isHovering = false;
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+              this.loadImage(files[0]);
+            }
+          },
+          handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+              this.loadImage(file);
+            }
+          },
+          loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              this.droppedImage = new Image();
+              this.droppedImage.src = e.target.result;
+              this.drawCanvas(); // ドロップ後にキャンバスを再描画
+            };
+            reader.readAsDataURL(file);
+          },
+          drawCanvas() {
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+
+            const templateImage = new Image();
+            templateImage.src = this.templateImageSrc;
+
+            templateImage.onload = () => {
+              context.clearRect(0, 0, canvas.width, canvas.height);
+
+              // 640×360に画像を描画
+              context.drawImage(templateImage, 0, 0, 640, 360);
+
+              // 吹き出し内のテキスト配置
+              context.font = '24px Arial';
+              context.fillStyle = 'black';
+              context.textAlign = 'center';
+              const lines = this.text2.split('\n');
+              lines.forEach((line, index) => {
+                context.fillText(line, 170, 105 + (index * 30)); // 赤枠の中にテキスト配置
+              });
+
+              // 下部テキストに「好きな」と「発表ドラゴン」を追加して表示
+            if (this.text1) {  // text1に文字が入力されている場合のみ実行
+             const fullText = `好きな${this.text1}発表ドラゴン`;
+              context.font = '30px Arial';
+              context.fillStyle = 'black';
+              context.textAlign = 'center';
+              context.fillText(fullText, canvas.width / 2, canvas.height - 30);
+            }
+
+
+              // 画像下に新しいテキストを描画
+              context.font = '24px Arial';
+              context.fillStyle = 'black';
+              context.textAlign = 'center';
+              context.fillText(this.text3, canvas.width / 3.7, canvas.height - 110);
+
+              // ドロップされた画像を赤枠の中に描画
+              if (this.droppedImage) {
+                // 赤枠に収まるようにサイズ調整
+                const redBoxX = 60;  // 赤枠のX位置
+                const redBoxY = 60;  // 赤枠のY位置
+                const redBoxWidth = 220;
+                const redBoxHeight = 150;
+                const aspectRatio = this.droppedImage.width / this.droppedImage.height;
+
+                let drawWidth = redBoxWidth;
+                let drawHeight = redBoxHeight;
+
+                // アスペクト比を維持してサイズ調整
+                if (aspectRatio > 1) {
+                  drawHeight = drawWidth / aspectRatio;
+                } else {
+                  drawWidth = drawHeight * aspectRatio;
+                }
+
+                context.drawImage(this.droppedImage, redBoxX, redBoxY, drawWidth, drawHeight);
+              }
+
+              this.imageSrc = canvas.toDataURL('image/jpeg');
+            };
+          }
+        }
+      });
+    </script>
+</body>
+</html>

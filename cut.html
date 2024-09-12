@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像切り取りサイト</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.3/cropper.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.3/cropper.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 30px;
+            color: #333;
+            font-size: 28px;
+        }
+        .container {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload input {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        #img-container {
+            margin-top: 20px;
+            width: 400px;
+            height: 225px;
+            border: 2px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            position: relative;
+        }
+        #img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        #drag-instruction {
+            position: absolute;
+            color: #666;
+            font-size: 16px;
+        }
+        #cropBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #cropBtn:hover {
+            background-color: #0056b3;
+        }
+        #canvas {
+            margin-top: 30px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #download_link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        #download_link:hover {
+            background-color: #45a049;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>画像切り抜きサイト</h1>
+
+        <div class="upload">
+            <input type="file" id="file" accept="image/*" />
+        </div>
+
+        <!-- ドラッグ＆ドロップ可能なエリア -->
+        <div id="img-container" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+            <p id="drag-instruction">ここに画像をドラッグ＆ドロップ</p>
+            <img id="image" src="" alt="Please upload an image" style="display:none;" />
+        </div>
+
+        <button id="cropBtn">現在の範囲で切り抜き</button>
+
+        <h3>下に出力されます</h3>
+        <canvas id="canvas" class="img-canvas" width="980" height="580"></canvas>
+        <br />
+
+        <a href="#" id="download_link" download="cropped_image.jpg" style="display:none;">画像をダウンロード</a>
+    </div>
+
+    <script>
+        var cropper;
+        var image = document.getElementById('image');
+        var dragInstruction = document.getElementById('drag-instruction');
+
+        // ドラッグオーバーイベントの処理
+        function handleDragOver(event) {
+            event.preventDefault();  // デフォルトの動作を無効化（ファイルの開封を防ぐ）
+        }
+
+        // ドロップイベントの処理
+        function handleDrop(event) {
+            event.preventDefault();  // デフォルトの動作を無効化
+            var file = event.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    image.src = e.target.result;
+                    image.style.display = 'block';  // 画像を表示
+                    dragInstruction.style.display = 'none';  // ドラッグの説明文を非表示
+
+                    // Cropperを初期化または再初期化
+                    if (cropper) {
+                        cropper.destroy();  // すでに存在する場合は破棄する
+                    }
+                    cropper = new Cropper(image, {
+                        aspectRatio: null,  // アスペクト比の制限を解除
+                        viewMode: 1,
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // ファイル選択が行われた場合の処理
+        document.getElementById('file').addEventListener('change', function(e) {
+            var fileData = e.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function() {
+                image.src = reader.result;
+                image.style.display = 'block';
+                dragInstruction.style.display = 'none';
+
+                // Cropperを初期化する
+                if (cropper) {
+                    cropper.destroy();  // すでに存在する場合は破棄する
+                }
+                cropper = new Cropper(image, {
+                    aspectRatio: null,  // アスペクト比の制限を解除
+                    viewMode: 1,
+                });
+            };
+            reader.readAsDataURL(fileData);
+        });
+
+        // クロップボタンのクリックイベント
+        document.getElementById('cropBtn').addEventListener('click', function() {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            var croppedCanvas = cropper.getCroppedCanvas();
+
+            // キャンバスをクリア
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 切り取った画像をキャンバスに描画
+            context.drawImage(croppedCanvas, 0, 0, canvas.width, canvas.height);
+
+            // 生成された画像をダウンロードリンクに設定
+            var downloadLink = document.getElementById('download_link');
+            downloadLink.href = canvas.toDataURL('image/jpeg');
+            downloadLink.style.display = 'inline-block'; // ダウンロードリンクを表示
+        });
+    </script>
+</body>
+</html>
