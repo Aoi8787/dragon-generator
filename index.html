@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像ジェネレーター</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 30px;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+        .option {
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            width: 180px;
+        }
+        .option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .option img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .option h3 {
+            margin: 10px 0;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        .links {
+            margin-top: 50px;
+        }
+        .link-item {
+            margin: 10px;
+            font-size: 18px;
+        }
+        .link-item a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>どの画像を作りますか？</h1>
+    <div class="container">
+        <!-- 1つ目のオプション -->
+        <div class="option">
+            <a href="doragonn.html">
+                <img src="images/好きな惣菜発表ドラゴン2.png" alt="好きな〇〇発表ドラゴンジェネレーター">
+                <h3>好きな〇〇発表ドラゴン</h3>
+            </a>
+        </div>
+        <!-- 2つ目のオプション -->
+        <div class="option">
+            <a href="index.html">
+                <img src="images/ロボカス3.png" alt="ロボカスジェネレーター">
+                <h3>ロボカス</h3>
+            </a>
+        </div>
+        <!-- 3つ目のオプション -->
+        <div class="option">
+            <a href="cut.html">
+                <img src="images/kirinuki.png" alt="画像切り取り">
+                <h3>画像切り抜き</h3>
+            </a>
+        </div>
+    </div>
+
+    <!-- ページへのリンク -->
+    <!--<div class="links">
+        <div class="link-item">
+            <a href="doragonn.html">好きな〇〇発表ドラゴンジェネレーター</a>
+        </div>
+        <div class="link-item">
+            <a href="index.html">ロボカスジェネレーター</a>
+        </div>
+        <div class="link-item">
+            <a href="cut.html">画像切り抜きページ</a>
+        </div>
+    </div>-->
+</body>
+</html>
