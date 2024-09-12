@@ -3,247 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ロボカス画像生成サイト</title>
+    <title>画像ジェネレーター</title>
     <style>
         body {
-            background-color: #e0e0e0; /* 背景色をグレーに変更 */
-            font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif;
-        }
-
-        .h1-container {
-            display: flex;
-            align-items: center; /* タイトルと画像を縦に中央揃え */
-            justify-content: center; /* タイトルと画像を中央揃え */
-            margin-top: 20px;
-        }
-
-        h1 {
-            position: relative;
-            display: inline-block;
-            margin: 1.5em 15px 1.5em 0;
-            padding: 7px 10px;
-            min-width: 120px;
-            max-width: 100%;
-            color: #555;
-            font-size: 2.5em;
-            background: #FFF;
-            border: solid 3px #555;
-            border-radius: 20px;
-        }
-        h1:before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            right: -24px;
-            margin-top: -12px;
-            border: 12px solid transparent;
-            border-left: 12px solid #FFF;
-            z-index: 2;
-        }
-
-        h1:after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            right: -30px;
-            margin-top: -14px;
-            border: 14px solid transparent;
-            border-left: 14px solid #555;
-            z-index: 1;
-        }
-
-        h1 + img {
-            width: 118px;
-            height: 125px; /* 画像のサイズを指定 */
-        }
-
-        .app {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
             text-align: center;
-            margin-top: 20px;
         }
-
-        .img-canvas {
-            border: 1px solid black;
-            margin-top: 20px;
-            position: relative;
+        h1 {
+            margin-top: 30px;
+            color: #333;
+            font-size: 24px;
         }
-
-        .download-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .download-link:hover {
-            background-color: #45a049;
-        }
-
-        textarea {
-            width: 300px;
-            height: 50px;
-            margin-bottom: 20px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #1976D2;
-        }
-
-        .drop-zone {
-            width: 300px;
-            height: 100px;
-            border: 2px dashed #ccc;
-            margin: 20px auto;
+        .container {
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: #aaa;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding: 0 10px;
+        }
+        .option {
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            width: 180px;
+            max-width: 100%;
+        }
+        .option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .option img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .option h3 {
+            margin: 10px 0;
+            color: #333;
             font-size: 16px;
         }
-
-        .drop-zone.hover {
-            background-color: #f0f0f0;
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        /* スマートフォン対応 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 22px;
+                margin-top: 20px;
+            }
+            .option {
+                margin: 10px;
+                width: 160px;
+            }
+            .option img {
+                height: 130px;
+            }
+            .option h3 {
+                font-size: 14px;
+            }
+        }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+                margin-top: 15px;
+            }
+            .option {
+                margin: 10px;
+                width: 140px;
+            }
+            .option img {
+                height: 120px;
+            }
+            .option h3 {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="app" class="app">
-        <div class="h1-container">
-            <h1>ロボカスジェネレーター</h1>
-            <img src="images/ロボカス3.png" alt="ロボカス">
+    <h1>どの画像を作りますか？</h1>
+    <div class="container">
+        <!-- 1つ目のオプション -->
+        <div class="option">
+            <a href="doragonn.html">
+                <img src="images/好きな惣菜発表ドラゴン2.png" alt="好きな〇〇発表ドラゴンジェネレーター">
+                <h3>好きな〇〇発表ドラゴン</h3>
+            </a>
         </div>
-
-        <!-- ドラッグ＆ドロップまたはファイル選択ゾーン -->
-        <div class="drop-zone" @drop.prevent="handleDrop" @dragover.prevent="handleDragOver">
-            背景画像をここにドラッグ＆ドロップ
+        <!-- 2つ目のオプション -->
+        <div class="option">
+            <a href="index.html">
+                <img src="images/ロボカス3.png" alt="ロボカスジェネレーター">
+                <h3>ロボカス</h3>
+            </a>
         </div>
-        <input type="file" @change="handleFileSelect" accept="image/*">
-        <p>画像を選択すると画像について言及している風になります</p>
-
-        <!-- テキスト入力 -->
-        <textarea v-model="text" placeholder="ロボカスに喋らせたいことを入力しよう"></textarea>
-
-        <!-- ボタンをテキストエリアの下に中央揃えで配置 -->
-        <button @click="drawCanvas">画像を生成</button>
-
-        <!-- Canvas表示 -->
-        <h3>あなただけのロボカスを作ろう！</h3>
-        <canvas id="canvas" class="img-canvas" width="500" height="500"></canvas>
-
-        <!-- Canvasの内容を画像として表示 -->
-        <h3>右クリックか長押しで保存してください</h3>
-        <img :src="imageSrc" alt="Canvas Image Result" v-if="imageSrc">
-
-        <!-- ダウンロードリンク -->
-        <a :href="imageSrc" download="generated-image.jpg" class="download-link" v-if="imageSrc">画像をダウンロード</a>
+        <!-- 3つ目のオプション -->
+        <div class="option">
+            <a href="cut.html">
+                <img src="images/kirinuki.png" alt="画像切り取り">
+                <h3>画像切り抜き</h3>
+            </a>
+        </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script>
-      new Vue({
-        el: '#app',
-        data: {
-          text: '', 
-          imageSrc: '',
-          templateImageSrc: 'images/ロボカス.png', 
-          miniImageSrc: 'images/ロボカスミニ.png', 
-          backgroundImg: null
-        },
-        methods: {
-          handleFileSelect(event) {
-            const file = event.target.files[0];
-            this.loadBackgroundImage(file);
-          },
-          handleDrop(event) {
-            const file = event.dataTransfer.files[0];
-            this.loadBackgroundImage(file);
-          },
-          loadBackgroundImage(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              this.backgroundImg = e.target.result;
-            };
-            reader.readAsDataURL(file);
-          },
-          drawCanvas() {
-            const canvas = document.getElementById('canvas');
-            const context = canvas.getContext('2d');
-
-            const templateImage = new Image();
-            templateImage.src = this.backgroundImg ? this.miniImageSrc : this.templateImageSrc;
-
-            templateImage.onload = () => {
-              context.clearRect(0, 0, canvas.width, canvas.height);
-
-              // 背景画像がある場合、まず背景画像を描画
-              if (this.backgroundImg) {
-                const backgroundImage = new Image();
-                backgroundImage.src = this.backgroundImg;
-                backgroundImage.onload = () => {
-                  context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-
-                  // その後にロボカスミニ画像を右下に描画 (500x500の枠の中で260x275の大きさで描画)
-                  const miniImageX = canvas.width - 260;
-                  const miniImageY = canvas.height - 275;
-                  context.drawImage(templateImage, miniImageX, miniImageY, 260, 275);
-
-                  this.addTextToCanvas(context, canvas, true); // true でテキスト位置を指定
-                };
-              } else {
-                // 背景画像がない場合、通常のロボカス画像を描画
-                context.drawImage(templateImage, 0, 0, 500, 500);
-                this.addTextToCanvas(context, canvas, false); // false で通常位置
-              }
-            };
-          },
-          addTextToCanvas(context, canvas, isMini) {
-            if (isMini) {
-              // フォントサイズを 5分の3 に変更し、テキストの位置を調整
-              context.font = '13px Arial'; 
-              context.fillStyle = 'black';
-              context.textAlign = 'center';
-
-              // 吹き出しの赤枠部分にテキストを表示（背景画像があるとき）
-              const textX = canvas.width / 1.34;
-              const textY = canvas.height - 194; // 吹き出しの位置に合わせて調整
-              context.fillText(this.text, textX, textY);
-            } else {
-              // 通常のフォントサイズ
-              context.font = '30px Arial';
-              context.fillStyle = 'black';
-              context.textAlign = 'center';
-
-              // 通常のテキスト位置（背景画像がないとき）
-              const lines = this.text.split('\n');
-              lines.forEach((line, index) => {
-                context.fillText(line, canvas.width / 2, canvas.height / 2 - 100 + (index * 40));
-              });
-            }
-
-            this.imageSrc = canvas.toDataURL('image/jpeg');
-          }
-        }
-      });
-    </script>
 </body>
 </html>
