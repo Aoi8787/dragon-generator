@@ -257,31 +257,34 @@
             };
           },
           addTextToCanvas(context, canvas, isMini) {
-            if (isMini) {
-              // フォントサイズを 5分の3 に変更し、テキストの位置を調整
-              context.font = '13px Arial'; 
-              context.fillStyle = 'black';
-              context.textAlign = 'center';
+    if (isMini) {
+        context.font = '16px Arial'; 
+        context.fillStyle = 'black';
+        context.textAlign = 'center';
 
-              // 吹き出しの赤枠部分にテキストを表示（背景画像があるとき）
-              const textX = canvas.width / 1.34;
-              const textY = canvas.height - 194; // 吹き出しの位置に合わせて調整
-              context.fillText(this.text, textX, textY);
-            } else {
-              // 通常のフォントサイズ
-              context.font = '30px Arial';
-              context.fillStyle = 'black';
-              context.textAlign = 'center';
+        const textX = canvas.width / 1.34;
+        const textY = canvas.height - 196;
+        const lineHeight = 15; // 改行時の行間を設定
 
-              // 通常のテキスト位置（背景画像がないとき）
-              const lines = this.text.split('\n');
-              lines.forEach((line, index) => {
-                context.fillText(line, canvas.width / 2, canvas.height / 2 - 100 + (index * 40));
-              });
-            }
+        const lines = this.text.split('\n'); // 改行で分割
+        lines.forEach((line, index) => {
+            context.fillText(line, textX, textY + (index * lineHeight)); // 各行を順に表示
+        });
+    } else {
+        context.font = '30px Arial';
+        context.fillStyle = 'black';
+        context.textAlign = 'center';
 
-            this.imageSrc = canvas.toDataURL('image/jpeg');
-          }
+        const lineHeight = 40; // 改行時の行間を設定
+        const lines = this.text.split('\n'); // 改行で分割
+        lines.forEach((line, index) => {
+            context.fillText(line, canvas.width / 2, canvas.height / 2 - 100 + (index * lineHeight)); // 各行を順に表示
+        });
+    }
+
+    this.imageSrc = canvas.toDataURL('image/jpeg');
+}
+
         }
       });
     </script>
