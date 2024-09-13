@@ -73,7 +73,11 @@
             background-color: #0056b3;
         }
         #canvas {
+            display: none;
+        }
+        #outputImage {
             margin-top: 30px;
+            max-width: 100%;
             border: 2px solid #333;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -110,20 +114,17 @@
 
         <button id="cropBtn">現在の範囲で切り抜き</button>
 
-        <h3>下に出力されます</h3>
-        <canvas id="canvas" class="img-canvas"></canvas>
-        <br />
-        <!-- 画像保存のためのダウンロードリンクを追加 -->
-        <a id="downloadLink" download="cropped-image.png" style="display:none;">画像を保存</a>
+        <h3>切り抜いた画像がこちらに表示されます</h3>
+        <img id="outputImage" src="" alt="Cropped Image" />
 
     </div>
-     <p>長押しか右クリックで保存してください</p>
+    <p>長押しか右クリックで保存してください</p>
+
     <script>
         var cropper;
         var image = document.getElementById('image');
         var dragInstruction = document.getElementById('drag-instruction');
-        var canvas = document.getElementById('canvas');
-        var context = canvas.getContext('2d');
+        var outputImage = document.getElementById('outputImage');
 
         function handleDragOver(event) {
             event.preventDefault();
@@ -174,72 +175,11 @@
         document.getElementById('cropBtn').addEventListener('click', function() {
             var croppedCanvas = cropper.getCroppedCanvas();
 
-            // クロップされた領域の幅と高さを取得
-            var cropBoxData = cropper.getCropBoxData();
-            var width = cropBoxData.width;
-            var height = cropBoxData.height;
+            // 画像をBase64形式で出力
+            var croppedImageDataURL = croppedCanvas.toDataURL('image/jpeg');
 
-            // キャンバスのサイズをクロップ領域に応じて動的に設定
-            canvas.width = width;
-            canvas.height = height;
-
-            // キャンバスにクロップされた画像を描画
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(croppedCanvas, 0, 0, canvas.width, canvas.height);
-            
-            document.getElementById('cropBtn').addEventListener('click', function() {
-    var croppedCanvas = cropper.getCroppedCanvas();
-
-    // 画像の元のサイズを取得
-    var originalWidth = image.naturalWidth;
-    var originalHeight = image.naturalHeight;
-
-    // クロップボックスの幅と高さを取得
-    var cropBoxData = cropper.getCropBoxData();
-    var width = cropBoxData.width;
-    var height = cropBoxData.height;
-
-    // キャンバスのサイズをクロップ領域に合わせて動的に設定
-    canvas.width = width;
-    canvas.height = height;
-
-    // 画像のサイズに基づいてクロップされた部分を描画
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(croppedCanvas, 0, 0, canvas.width, canvas.height);
-});
-
-            
-document.getElementById('cropBtn').addEventListener('click', function() {
-    var croppedCanvas = cropper.getCroppedCanvas();
-
-    // 画像の元のサイズを取得
-    var originalWidth = image.naturalWidth;
-    var originalHeight = image.naturalHeight;
-
-    // クロップボックスの幅と高さを取得
-    var cropBoxData = cropper.getCropBoxData();
-    var width = cropBoxData.width;
-    var height = cropBoxData.height;
-
-    // キャンバスのサイズをクロップ領域に合わせて動的に設定
-    canvas.width = width;
-    canvas.height = height;
-
-    // 画像のサイズに基づいてクロップされた部分を描画
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(croppedCanvas, 0, 0, canvas.width, canvas.height);
-
-    // 画像をJPEG形式でエクスポートして保存
-    var imageURL = canvas.toDataURL('image/jpeg');
-    var link = document.createElement('a');
-    link.href = imageURL;
-    link.download = 'cropped-image.jpg';
-    link.click();
-});
-
-                        
-
-            // スマホでは長押しで保存できるようにリンク不要
+            // 出力されたBase64画像をimgタグに表示
+            outputImage.src = croppedImageDataURL;
         });
     </script>
 </body>
